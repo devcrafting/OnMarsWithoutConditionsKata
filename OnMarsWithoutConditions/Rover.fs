@@ -76,19 +76,19 @@ module MarsRover =
         [1..n] |> List.fold (fun p y -> move p) p
 
     type Instruction() =
-        member x.Yield (item:'a) = item
+        member x.Yield (item:'a) = { X = 0; Y = 0; Direction = N }
 
         [<CustomOperation("move")>]
         member x.Move p =
-            move
+            move p
 
         [<CustomOperation("left")>]
         member x.Left p =
-            pivotLeft
+            pivotLeft p
             
         [<CustomOperation("right")>]
         member x.Right p =
-            pivotRight
+            pivotRight p
     let instruction = Instruction()
 
 module Tests =
@@ -176,11 +176,11 @@ module Tests =
 
     [<Fact>]
     let ``instruction`` () =
-        (instruction {
+        instruction {
             move
             left
             move
             move
             right
-        }) { X = 0; Y = 0; Direction = N }
+        }
         |> should equal { X = -2; Y = 1; Direction = N }
